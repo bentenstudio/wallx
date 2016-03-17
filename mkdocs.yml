@@ -1,0 +1,20 @@
+site_name: WallX Documentation
+pages:
+- Getting Started: index.md
+- User Guide: 
+    - Parse Server: user-guide/parse-server.md
+    - Source Code Configuration: user-guide/source-code-configuration.md
+    - Content Moderation: user-guide/content-moderation.md
+    - Monetization: user-guide/monetization.md
+    - Migration from Parse.com: user-guide/migration-from-parse-com.md
+- Support: support.md
+theme: 'flatly'
+copyright: "Benten Studio"
+extra_css: [extra.css]
+markdown_extensions:
+    - admonition
+    - codehilite
+    - nl2br
+    - del_ins
+    - custom_span_class
+    - mkdcomments
