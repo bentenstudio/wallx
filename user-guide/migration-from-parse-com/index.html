@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Migration from Parse.com - WallX Documentation</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">WallX Documentation</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Getting Started</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        
+<li >
+    <a href="../parse-server/">Parse Server</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../source-code-configuration/">Source Code Configuration</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../content-moderation/">Content Moderation</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../monetization/">Monetization</a>
+</li>
+
+                    
+                        
+<li class="active">
+    <a href="./">Migration from Parse.com</a>
+</li>
+
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../support/">Support</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                <li >
+                    <a rel="next" href="../monetization/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../../support/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#configure-mongodb">Configure MongoDB</a></li>
+        
+            <li><a href="#step-1-enable-ssl-connection">Step 1: Enable SSL Connection</a></li>
+        
+    
+        <li class="main "><a href="#initiate-migration-process">Initiate Migration Process</a></li>
+        
+    
+        <li class="main "><a href="#verify-data-migration">Verify Data Migration</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h2 id="configure-mongodb">Configure MongoDB</h2>
+<h4 id="step-1-enable-ssl-connection">Step 1: Enable SSL Connection</h4>
+<p>Parse provides a migration tool for existing applications. In order to make use of it, we need to open MongoDB to external connections and secure it with a copy of the TLS/SSL certificate from Let's Encrypt. Start by combining <code>fullchain1.pem</code> and <code>privkey1.pem</code> into a new file in <code>/etc/ssl</code> (remember to change <span class="text-danger">domain_name</span> with yours):</p>
+<pre class="codehilite"><code>sudo cat /etc/letsencrypt/archive/domain_name/{fullchain1.pem,privkey1.pem} | sudo tee /etc/ssl/mongo.pem</code></pre>
+
+
+<div class="admonition note-warning">
+<p>You will have to repeat the above command after renewing your Let's Encrypt certificate. If you configure auto-renewal of the Let's Encrypt certificate, remember to include this operation.</p>
+</div>
+<p>Make sure <code>mongo.pem</code> is owned by the <strong>mongodb</strong> user, and readable only by its owner:</p>
+<pre class="codehilite"><code>sudo chown mongodb:mongodb /etc/ssl/mongo.pem
+sudo chmod 600 /etc/ssl/mongo.pem</code></pre>
+
+
+<p>Now, open <code>/etc/mongod.conf</code>:</p>
+<pre class="codehilite"><code>sudo nano /etc/mongod.conf</code></pre>
+
+
+<p>Here, we'll make several important changes.</p>
+<p>First, look for the <code>bindIp</code> line in the <code>net</code>: section, and tell MongoDB to listen on all addresses by changing <code>127.0.0.1</code> to <code>0.0.0.0</code>. Below this, add SSL configuration to the same section:</p>
+<pre class="codehilite"><code class="language-yaml"># network interfaces
+net:
+  port: 27017
+  bindIp: 0.0.0.0
+  ssl:
+    mode: requireSSL
+    PEMKeyFile: /etc/ssl/mongo.pem</code></pre>
+
+
+<div class="admonition note-warning">
+<p>You can skip above commands and configs if you skip Let's Encrypt installation. You still need to edit <code>/etc/mongod.conf</code> to continue with the migration.</p>
+</div>
+<p>Finally, the migration tool requires us to set the <code>failIndexKeyTooLong</code> parameter to <code>false</code>:</p>
+<pre class="codehilite"><code class="language-yaml">setParameter:
+  failIndexKeyTooLong: false</code></pre>
+
+
+<div class="admonition note-warning">
+<p><strong>Note:</strong> Whitespace is significant in MongoDB configuration files, which are based on YAML. When copying configuration values, make sure that you preserve indentation.</p>
+</div>
+<p>Exit and save the file.</p>
+<p>Restart the mongod service:</p>
+<pre class="codehilite"><code>sudo service mongod restart</code></pre>
+
+
+<h2 id="initiate-migration-process">Initiate Migration Process</h2>
+<p>Login to Parse dashboard at dashboard.parse.com then open the settings for your app. Under <strong>General</strong>, locate the <strong>Migrate</strong> button and click it:<br />
+<img alt="Migrate in General" src="../../assets/images/small-000.png" /></p>
+<p>You will be prompted for a MongoDB connection string. Use the following format:</p>
+<pre class="codehilite"><code>mongodb://parse:password@your_domain_name:27017/database_name</code></pre>
+
+
+<p>If you have <code>Let's Encrypt</code> SSL, add <code>?ssl=true</code> after the URL.</p>
+<p>For example, if you are using the domain <code>example.com</code>, with the user <code>parse</code>, the password <code>foo</code>, and a database called <code>wallx</code>, your connection string would look like this:</p>
+<pre class="codehilite"><code>mongodb://parse:foo@example.com:27017/wallx?ssl=true</code></pre>
+
+
+<p>The configuration should look like below:</p>
+<p><img alt="Database connection string" src="../../assets/images/small-001.png" /></p>
+<p>Click <strong>Begin the migration</strong>. You should see progress dialogs for copying a snapshot of your Parse hosted database to your server, and then for syncing new data since the snapshot was taken. The duration of this process will depend on the amount of data to be transferred, and may be substantial.</p>
+<p><img alt="" src="../../assets/images/small-002.png" /><br />
+<img alt="" src="../../assets/images/small-003.png" /></p>
+<p><strong>Don't click Finalize yet.</strong> We need to verify the migration first.</p>
+<h2 id="verify-data-migration">Verify Data Migration</h2>
+<p>Return to your <code>mongo</code> shell, and examine your local database. Begin by accessing <strong>database_name</strong> and examining the collections it contains:</p>
+<pre class="codehilite"><code>use database_name
+show collections</code></pre>
+
+
+<p>Sample output</p>
+<pre class="codehilite"><code>Wallpaper
+Likes
+_Index
+_SCHEMA
+_Session
+_User
+_dummy
+system.indexes</code></pre>
+
+
+<p>You can examine the contents of a specific collection with the <code>.find()</code>method:</p>
+<pre class="codehilite"><code>db.Wallpaper.find()</code></pre>
+
+
+<p>After verifying the data in your new database, come back to Parse dashboard in your browser and the <strong>Migration</strong> tab:</p>
+<p><img alt="" src="../../assets/images/small-004.png" /></p>
+<p>Click the <strong>Finalize</strong> button:</p>
+<p><img alt="" src="../../assets/images/small-005.png" /></p>
+<p>Your app should now be migrated.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <center>Benten Studio</center>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

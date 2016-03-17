@@ -1,0 +1,76 @@
+h2 {
+    margin-top: 35px;
+}
+
+h4 {
+    text-decoration: underline;
+    font-style: italic;
+}
+
+
+.main {
+    margin-left: -10px;
+}
+
+.nav {
+    padding-left:  10px;
+}
+
+div[role=main] {
+    font-size: 16px;
+    line-height: 28px;
+    width: 765px;
+}
+
+div[role=main] p {
+    margin: 0 0 22px 0;
+}
+
+.bs-sidenav{
+    font-size: 12.5px;
+}
+
+.article li {
+    margin-left: 36px;
+}
+
+.article ul>li:before{
+    content: '\25CF';
+}
+
+.alert p {
+    margin-bottom: 0px !important;
+}
+
+.admonition p {
+    margin-bottom: 0px !important;
+}
+
+.admonition {
+    padding: 15px;
+    margin-bottom: 21px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.admonition-title {
+    color: rgba(0,0,0,0.3);
+}
+.note-warning {
+    background-color: #F4F2D4;
+    color: #333;
+}
+
+.note-danger{
+    background-color: #FEDEE1;
+}
+
+.sample-output {
+    background: #ecf0f1;
+    border:solid 1px #ccc;
+    padding: 10px;
+}
+
+.sample-output p {
+    
+}

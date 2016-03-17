@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Parse Server - WallX Documentation</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">WallX Documentation</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Getting Started</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        
+<li class="active">
+    <a href="./">Parse Server</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../source-code-configuration/">Source Code Configuration</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../content-moderation/">Content Moderation</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../monetization/">Monetization</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../migration-from-parse-com/">Migration from Parse.com</a>
+</li>
+
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../support/">Support</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                <li >
+                    <a rel="next" href="../..">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../source-code-configuration/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#parse-server">Parse Server</a></li>
+        
+    
+        <li class="main "><a href="#setting-up-vps">Setting Up VPS</a></li>
+        
+            <li><a href="#step-1-create-a-droplet">Step 1: Create a Droplet</a></li>
+        
+            <li><a href="#step-2-setup-domain-name">Step 2: Setup Domain Name</a></li>
+        
+            <li><a href="#step-3-installing-ssh-client">Step 3: Installing SSH Client</a></li>
+        
+    
+        <li class="main "><a href="#setting-up-ssl-certificate-optional">Setting Up SSL Certificate (Optional)</a></li>
+        
+            <li><a href="#step-1-install-lets-encrypt">Step 1: Install Let's Encrypt</a></li>
+        
+            <li><a href="#step-2-retrieve-initial-certificate">Step 2: Retrieve Initial Certificate</a></li>
+        
+    
+        <li class="main "><a href="#configure-mongodb">Configure MongoDB</a></li>
+        
+            <li><a href="#create-an-admin-user">Create an Admin User</a></li>
+        
+            <li><a href="#create-a-database">Create a Database</a></li>
+        
+    
+        <li class="main "><a href="#installing-parse-server">Installing Parse Server</a></li>
+        
+    
+        <li class="main "><a href="#retrieve-keys">Retrieve Keys</a></li>
+        
+    
+        <li class="main "><a href="#configure-parse-server">Configure Parse Server</a></li>
+        
+            <li><a href="#step-1-configure-pm2">Step 1: Configure pm2</a></li>
+        
+            <li><a href="#step-2-start-parse-server-with-pm2">Step 2: Start parse-server with pm2</a></li>
+        
+    
+        <li class="main "><a href="#configure-nginx">Configure Nginx</a></li>
+        
+    
+        <li class="main "><a href="#storing-files-with-aws-s3-optional">Storing files with AWS S3 (Optional)</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h2 id="parse-server">Parse Server</h2>
+<p>There are many server providers out there, but DigitalOcean is recommended due to its cheap plans. You can get $10 credit (2-month worth) by registering <a href="https://m.do.co/c/b32e35e3d2be">here</a><br />
+<br></p>
+<h2 id="setting-up-vps">Setting Up VPS</h2>
+<h4 id="step-1-create-a-droplet">Step 1: Create a Droplet</h4>
+<ol>
+<li>Create a new Droplet <a href="https://cloud.digitalocean.com/droplets/new">here</a></li>
+<li>Choose Ubuntu 14.04</li>
+<li>Choose a size that meets your requirement</li>
+<li>Choose preferred datacenter region</li>
+<li>Check User Data box and enter following script</li>
+<li>Fill in other optional information and click Create</li>
+<li>Once done, you will receive server information in your email inbox</li>
+</ol>
+<p><em>User Data script:</em></p>
+<pre class="codehilite"><code>#cloud-config
+apt_sources:
+  # Enable MongoDB repository
+  - source: deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse
+    keyid: 7F0CEB10
+    filename: mongodb.list
+apt_update: true
+packages:
+  - mongodb-org
+  - git
+  - bc
+  - nginx
+runcmd:
+  - sudo git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt
+  - cd ~
+  - curl -sL https://deb.nodesource.com/setup_5.x -o nodesource_setup.sh
+  - sudo -E bash ./nodesource_setup.sh
+  - sudo apt-get install -y nodejs build-essential git
+  - sudo npm install -g parse-server pm2</code></pre>
+
+
+<h4 id="step-2-setup-domain-name">Step 2: Setup Domain Name</h4>
+<p>With this setup, you will be able to use your own domain name to use as Parse Server's API endpoint. For a detailed guide, see <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-host-name-with-digitalocean">How To Set Up a Host Name with DigitalOcean</a> tutorial. If you need help with setting the DNS servernames, take a look at <a href="https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars">How To Point to DigitalOcean Nameservers from Common Domain Registrars</a></p>
+<h4 id="step-3-installing-ssh-client">Step 3: Installing SSH Client</h4>
+<p>You will need to install a SSH client to connect to the VPS. Some good clients to use:<br />
+  - <a href="http://www.putty.org/">PuTTY</a><br />
+  - <a href="https://winscp.net">WinSCP</a><br />
+  - <a href="https://github.com/jimradford/superputty/releases">SuperPuTTY</a><br />
+  - <a href="https://puttytray.goeswhere.com/">PuTTYtray</a><br />
+  - <a href="http://www.9bis.net/kitty/">KiTTY</a><br />
+Follow <a href="https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-putty-on-digitalocean-droplets-windows-users">this tutorial</a> to connect to DigitalOcean VPS using PuTTY.<br />
+<br></p>
+<h2 id="setting-up-ssl-certificate-optional">Setting Up SSL Certificate (Optional)</h2>
+<p>Let's Encrypt is a new Certificate Authority that provides an easy way to obtain free TLS/SSL certificates. Because a certificate is necessary to secure both the migration of data to MongoDB and your Parse Server API endpoint, we'll begin by retrieving one with the <code>letsencrypt</code> client.</p>
+<h4 id="step-1-install-lets-encrypt">Step 1: Install Let's Encrypt</h4>
+<p>This step is done for you by a custom script entered during Droplet creation.</p>
+<h4 id="step-2-retrieve-initial-certificate">Step 2: Retrieve Initial Certificate</h4>
+<p>Change to the <code>letsencrypt</code> directory:</p>
+<pre class="codehilite"><code>cd /opt/letsencrypt</code></pre>
+
+
+<p>Run <code>letsencrypt</code> with the Standalone plugin:</p>
+<pre class="codehilite"><code>sudo service nginx stop
+./letsencrypt-auto certonly --standalone</code></pre>
+
+
+<p>You'll be prompted to answer several questions, including your email address, agreement to a Terms of Service, and the domain name(s) for the certificate. Once finished, you'll receive notes much like the following:</p>
+<pre class="codehilite"><code>IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at
+   /etc/letsencrypt/live/your_domain_name/fullchain.pem. Your cert will expire
+   on 2016-05-16. To obtain a new version of the certificate in the
+   future, simply run Let's Encrypt again.
+ - If you like Let's Encrypt, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le</code></pre>
+
+
+<p>Note the path and expiration date of your certificate, highlighted in the example output. Your certificate files should now be available in /etc/letsencrypt/<strong>your_domain_name</strong>/</p>
+<div class="admonition note-danger">
+<p><strong><em>Warning:</em></strong> You can safely complete this guide without worrying about certificate renewal, but you will need to address it for any long-lived production environment.</p>
+</div>
+<p>You may have noticed that your Let's Encrypt certificate is due to expire in 90 days. This is a deliberate feature of the Let's Encrypt approach, intended to minimize the amount of time that a compromised certificate can exist in the wild if something goes wrong.</p>
+<p>Let's Encrypt is still in beta. Better auto-renewal features are planned, but in the meanwhile you will either have to repeat the certificate retrieval process by hand, or use a scheduled script to handle it for you. The details of automating this process are covered in <a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04">How To Secure Nginx with Let's Encrypt on Ubuntu 14.04</a>, particularly the section on <a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04#step-4-%E2%80%94-set-up-auto-renewal">setting up auto renewal</a>.</p>
+<p><br></p>
+<h2 id="configure-mongodb">Configure MongoDB</h2>
+<h4 id="create-an-admin-user">Create an Admin User</h4>
+<p>We will create a <code>parse</code> user to add to server configuration. First, we need to enable authentication in order to create a new user. Run below command to edit <code>/etc/mongid.conf</code></p>
+<pre class="codehilite"><code>sudo nano /etc/mongod.conf</code></pre>
+
+
+<p>Under <code># security</code>, enable client authorization:</p>
+<pre class="codehilite"><code class="language-yaml"># security
+security:
+  authorization: enabled</code></pre>
+
+
+<p>Exit and save the file.</p>
+<p>Before restarting the <code>mongod</code> service, we need to add a user with the <code>admin</code> role. Connect to the running MongoDB instance:</p>
+<pre class="codehilite"><code>mongo --port 27017</code></pre>
+
+
+<p>Create an admin user. Be sure to replace <span class="text-danger">password</span> with  a strong password.</p>
+<pre class="codehilite"><code class="language-bash">use admin
+db.createUser({
+  user: &quot;parse&quot;,
+  pwd: &quot;password&quot;,
+  roles: [ { role: &quot;userAdminAnyDatabase&quot;, db: &quot;admin&quot; } ]
+})
+exit</code></pre>
+
+
+<h4 id="create-a-database">Create a Database</h4>
+<p>If you have <code>Let's Encrypt</code> SSL certificates, run following command. Make sure to replace <code>myUsername</code> with yours.</p>
+<pre class="codehilite"><code class="language-bash">mongo --port 27017 --ssl --sslAllowInvalidCertificates --authenticationDatabase admin --username myUsername --password</code></pre>
+
+
+<p>Otherwise, run this command:</p>
+<pre class="codehilite"><code class="language-bash">mongo --port 27017 admin --username myUsername--password</code></pre>
+
+
+<p>You will be prompt to enter the password you created earlier.</p>
+<p>Once logged in, you will need to create a database and a user that is used for migration. Run following command with replacing <span class="text-danger"><strong>database_name</strong></span> with your own.</p>
+<pre class="codehilite"><code>use database_name
+db.createUser({ user: &quot;parse&quot;, pwd: &quot;password&quot;, roles: [ &quot;readWrite&quot;, &quot;dbAdmin&quot; ] })</code></pre>
+
+
+<p>Restart the mongod service:</p>
+<pre class="codehilite"><code>sudo service mongod restart</code></pre>
+
+
+<p><br></p>
+<h2 id="installing-parse-server">Installing Parse Server</h2>
+<p>Use <code>npm</code> to install the <code>parse-server</code> utility, the <code>pm2</code> process manager, and their dependencies, globally:</p>
+<pre class="codehilite"><code>sudo npm install -g parse-server pm2</code></pre>
+
+
+<p>Instead of running <code>parse-server</code> as <strong>root</strong> or your <code>sudo</code> user, we'll create a system user called <strong>parse</strong>:</p>
+<pre class="codehilite"><code class="language-bash">sudo useradd --create-home --system parse</code></pre>
+
+
+<p>Now set a password for <strong>parse</strong>:</p>
+<pre class="codehilite"><code>sudo passwd parse</code></pre>
+
+
+<p>You'll be prompted to enter a password twice.</p>
+<p>Now, use the <code>su</code> command to become the <strong>parse</strong> user:</p>
+<pre class="codehilite"><code>sudo su parse</code></pre>
+
+
+<p><br></p>
+<h2 id="retrieve-keys">Retrieve Keys</h2>
+<p>You'll need to retrieve some of the keys for your app. In the Parse dashboard, click on <strong>App Settings</strong> followed by <strong>Security &amp; Keys</strong>:</p>
+<p><img alt="" src="../../assets/images/small-007.png" /></p>
+<p>Since we only have Parse integrated for Android, you only need to collect <strong>Master Key</strong>, <strong>Application ID</strong> and <strong>Client Key</strong> to proceed with further setup. Using the same keys as before will not require you setup the source code again.<br />
+<br></p>
+<h2 id="configure-parse-server">Configure Parse Server</h2>
+<p><strong>PM2</strong> is a feature-rich process manager, popular with Node.js developers. We'll use the <code>pm2</code> utility to configure our <code>parse-server</code> instance and keep it running over the long term.</p>
+<h4 id="step-1-configure-pm2">Step 1: Configure pm2</h4>
+<p>Change to <strong>parse</strong>'s home directory:</p>
+<pre class="codehilite"><code>cd ~</code></pre>
+
+
+<p>We will edit the file called <code>/home/parse/ecosystem.json</code></p>
+<pre class="codehilite"><code>nano ecosystem.json</code></pre>
+
+
+<p>Paste the following, changing configuration values to reflect your MongoDB connection string, Application ID, and Master Key:</p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;apps&quot; : [{
+    &quot;name&quot;        : &quot;parse-wrapper&quot;,
+    &quot;script&quot;      : &quot;/usr/bin/parse-server&quot;,
+    &quot;watch&quot;       : true,
+    &quot;merge_logs&quot;  : true,
+    &quot;cwd&quot;         : &quot;/home/parse&quot;,
+    &quot;env&quot;: {
+      &quot;PARSE_SERVER_CLOUD_CODE_MAIN&quot;: &quot;/home/parse/cloud/main.js&quot;,
+      &quot;PARSE_SERVER_DATABASE_URI&quot;: &quot;mongodb://parse:password@your_domain_name:27017/database_name?ssl=true&quot;,
+      &quot;PARSE_SERVER_APPLICATION_ID&quot;: &quot;your_application_id&quot;,
+      &quot;PARSE_SERVER_MASTER_KEY&quot;: &quot;your_master_key&quot;,
+      &quot;PARSE_SERVER_CLIENT_KEY&quot;: &quot;your_client_key&quot;,
+      &quot;PARSE_SERVER_FACEBOOK_APP_IDS&quot;: &quot;your_facebook_app_id&quot;
+    }
+  }]
+}</code></pre>
+
+
+<p>You can also configure other options below:</p>
+<ul>
+<li><code>PARSE_SERVER_URL</code></li>
+<li><code>PARSE_SERVER_JAVASCRIPT_KEY</code></li>
+<li><code>PARSE_SERVER_REST_API_KEY</code></li>
+<li><code>PARSE_SERVER_DOT_NET_KEY</code></li>
+<li><code>PARSE_SERVER_ENABLE_ANON_USERS</code></li>
+</ul>
+<p>Other options with explanations can be found at <a href="https://github.com/ParsePlatform/parse-server/blob/master/src/cli/cli-definitions.js">ParsePlatform/parse-server</a></p>
+<p>Exit and save <code>ecosystem.json</code></p>
+<h4 id="step-2-start-parse-server-with-pm2">Step 2: Start parse-server with pm2</h4>
+<p>Now run the script with <code>pm2</code></p>
+<pre class="codehilite"><code>pm2 start ecosystem.json</code></pre>
+
+
+<p><em>Sample Output</em></p>
+<pre class="codehilite"><code>...
+[PM2] Spawning PM2 daemon
+[PM2] PM2 Successfully daemonized
+[PM2] Process launched
+┌───────────────┬────┬──────┬──────┬────────┬─────────┬────────┬─────────────┬──────────┐
+│ App name      │ id │ mode │ pid  │ status │ restart │ uptime │ memory      │ watching │
+├───────────────┼────┼──────┼──────┼────────┼─────────┼────────┼─────────────┼──────────┤
+│ parse-wrapper │ 0  │ fork │ 3499 │ online │ 0       │ 0s     │ 13.680 MB   │  enabled │
+└───────────────┴────┴──────┴──────┴────────┴─────────┴────────┴─────────────┴──────────┘
+Use `pm2 show &lt;id|name&gt;` to get more details about an app</code></pre>
+
+
+<p>Now tell <code>pm2</code> to save this process list:</p>
+<pre class="codehilite"><code>pm2 save</code></pre>
+
+
+<div class="admonition sample-output">
+<p class="admonition-title">Sample Output</p>
+<p>[PM2] Dumping processes</p>
+</div>
+<p>The list of processes <code>pm2</code> is running for the parse user should now be stored in <code>/home/parse/.pm2</code>.</p>
+<p>Now we need to make sure the <code>parse-wrapper</code> process we defined earlier in ecosystem.json is restored each time the server is restarted. Fortunately, <code>pm2</code> can generate and install a script on its own.</p>
+<p>Exit to your regular <code>sudo</code> user:</p>
+<pre class="codehilite"><code>exit</code></pre>
+
+
+<p>Tell pm2 to install initialization scripts for Ubuntu, to be run as the parse user, using /home/parse as its home directory:</p>
+<pre class="codehilite"><code>sudo pm2 startup ubuntu -u parse --hp /home/parse/</code></pre>
+
+
+<p><em>Sample Output</em></p>
+<pre class="codehilite"><code>[PM2] Spawning PM2 daemon
+[PM2] PM2 Successfully daemonized
+[PM2] Generating system init script in /etc/init.d/pm2-init.sh
+[PM2] Making script booting at startup...
+[PM2] -ubuntu- Using the command:
+    su -c &quot;chmod +x /etc/init.d/pm2-init.sh &amp;&amp; update-rc.d pm2-init.sh defaults&quot;
+System start/stop links for /etc/init.d/pm2-init.sh already exist.
+[PM2] Done.</code></pre>
+
+
+<p><br></p>
+<h2 id="configure-nginx">Configure Nginx</h2>
+<p>We'll use the Nginx web server to provide a reverse proxy to <code>parse-server</code>, so that we can serve the Parse API securely over TLS/SSL. If you did not install <code>Let's Encrypt</code>, you can skip this part.</p>
+<p>Open <code>/etc/nginx/sites-enabled/default</code></p>
+<pre class="codehilite"><code>sudo nano /etc/nginx/sites-enabled/default</code></pre>
+
+
+<p>Replace its contents with the following (make sure to replace <strong>your_domain_name</strong>):</p>
+<pre class="codehilite"><code># HTTP - redirect all requests to HTTPS
+server {
+    listen 80;
+    listen [::]:80 default_server ipv6only=on;
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS - serve HTML from /usr/share/nginx/html, proxy requests to /parse/
+# through to Parse Server
+server {
+        listen 443;
+        server_name your_domain_name;
+
+        root /usr/share/nginx/html;
+        index index.html index.htm;
+
+        ssl on;
+        # Use certificate and key provided by Let's Encrypt:
+        ssl_certificate /etc/letsencrypt/live/your_domain_name/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/your_domain_name/privkey.pem;
+        ssl_session_timeout 5m;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_prefer_server_ciphers on;
+        ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+
+        # Pass requests for /parse/ to Parse Server instance at localhost:1337
+        location /parse/ {
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-NginX-Proxy true;
+                proxy_pass http://localhost:1337/;
+                proxy_ssl_session_reuse off;
+                proxy_set_header Host $http_host;
+                proxy_redirect off;
+        }
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}</code></pre>
+
+
+<p>Exit the editor and save the file. Restart Nginx so that changes take effect:</p>
+<pre class="codehilite"><code>sudo service nginx restart</code></pre>
+
+
+<p><br></p>
+<h2 id="storing-files-with-aws-s3-optional">Storing files with AWS S3 (Optional)</h2>
+<p>Please note that current files stored on Parse are not migrated yet since Parse team is working on a solution at <a href="https://github.com/ParsePlatform/parse-server/wiki/Files-Migration">ParsePlatform/parse-server/wiki/Files-Migration</a>. Stay tuned until we have the final solution from them. In the meantime, your files are still working and newly uploaded files will be stored on your server. </p>
+<p>To use AWS S3 as file storage rather than current server, check tutorial on Github: <a href="https://github.com/ParsePlatform/parse-server/wiki/Storing-Files-in-AWS-S3">ParsePlatform/parse-server/wiki/Storing-Files-in-AWS-S3</a></p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <center>Benten Studio</center>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

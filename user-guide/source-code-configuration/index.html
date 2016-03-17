@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Source Code Configuration - WallX Documentation</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link href="../../extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">WallX Documentation</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Getting Started</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        
+<li >
+    <a href="../parse-server/">Parse Server</a>
+</li>
+
+                    
+                        
+<li class="active">
+    <a href="./">Source Code Configuration</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../content-moderation/">Content Moderation</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../monetization/">Monetization</a>
+</li>
+
+                    
+                        
+<li >
+    <a href="../migration-from-parse-com/">Migration from Parse.com</a>
+</li>
+
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../support/">Support</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                <li >
+                    <a rel="next" href="../parse-server/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../content-moderation/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#parse">Parse</a></li>
+        
+    
+        <li class="main "><a href="#social-login">Social Login</a></li>
+        
+            <li><a href="#configure-facebook-login">Configure Facebook Login</a></li>
+        
+            <li><a href="#disable-facebook-login">Disable Facebook Login</a></li>
+        
+    
+        <li class="main "><a href="#app-intro">App Intro</a></li>
+        
+            <li><a href="#change-slides-content">Change slides content</a></li>
+        
+            <li><a href="#change-slides-images">Change slides' images</a></li>
+        
+    
+        <li class="main "><a href="#about">About</a></li>
+        
+            <li><a href="#change-social-identities">Change Social identities</a></li>
+        
+            <li><a href="#change-the-background">Change the background</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h2 id="parse">Parse</h2>
+<ol>
+<li>Open Config file and res/values/strings.xml</li>
+<li>Edit following keys with your Application ID and Client Key you created earlier on Parse Server</li>
+</ol>
+<p><em>Config.java</em></p>
+<pre class="codehilite"><code class="language-java">public static final String PARSE_APPLICATION_ID = &quot;ENTER_YOUR_APPLICATION_ID&quot;;
+public static final String PARSE_CLIENT_KEY = &quot;ENTER_YOUR_CLIENT_KEY&quot;;</code></pre>
+
+
+<p><em>res/values/strings.xml</em></p>
+<pre class="codehilite"><code>&lt;string name=&quot;parse_app_id&quot;&gt;ENTER_YOUR_APPLICATION_ID&lt;/string&gt;
+&lt;string name=&quot;parse_client_key&quot;&gt;ENTER_YOUR_CLIENT_KEY&lt;/string&gt;</code></pre>
+
+
+<p><br></p>
+<h2 id="social-login">Social Login</h2>
+<h4 id="configure-facebook-login"><em>Configure Facebook Login</em></h4>
+<p>By default, the app will have Facebook login. You need to change following field in res/values/strings.xml so that this could work.</p>
+<pre class="codehilite"><code>&lt;string name=&quot;facebook_app_id&quot;&gt;ENTER_YOUR_FACEBOOK_APP_ID&lt;/string&gt;</code></pre>
+
+
+<p><br></p>
+<h4 id="disable-facebook-login"><em>Disable Facebook Login</em></h4>
+<p>If you wish to disable Facebook Login, you can remove following meta-data from AndroidManifest.xml file</p>
+<pre class="codehilite"><code class="language-xml">&lt;meta-data
+ android:name=&quot;com.parse.ui.ParseLoginActivity.FACEBOOK_LOGIN_ENABLED&quot;
+    android:value=&quot;true&quot; /&gt;
+&lt;meta-data
+ android:name=&quot;com.parse.ui.ParseLoginActivity.FACEBOOK_LOGIN_PERMISSIONS&quot;
+    android:resource=&quot;@array/my_facebook_permissions&quot; /&gt;</code></pre>
+
+
+<p><br></p>
+<h2 id="app-intro">App Intro</h2>
+<h4 id="change-slides-content"><em>Change slides content</em></h4>
+<p>Open <strong>res/values/strings.xml</strong> and edit following fields</p>
+<pre class="codehilite"><code class="language-xml">&lt;string name=&quot;intro.slide1.title&quot;&gt;WallX&lt;/string&gt;
+&lt;string name=&quot;intro.slide1.description&quot;&gt;Your ultimate wallpaper application&lt;/string&gt;
+&lt;string name=&quot;intro.slide2.title&quot;&gt;Easy Customization&lt;/string&gt;
+&lt;string name=&quot;intro.slide2.description&quot;&gt;This app Intro is easy to customize. So do other parts of the source.&lt;/string&gt;
+&lt;string name=&quot;intro.slide3.title&quot;&gt;Sold on Envato&lt;/string&gt;
+&lt;string name=&quot;intro.slide3.description&quot;&gt;This item is sold exclusively on Codecanyon&lt;/string&gt;</code></pre>
+
+
+<p><br></p>
+<h4 id="change-slides-images"><em>Change slides' images</em></h4>
+<p>Replace following files in res/drawable with desired ones</p>
+<ul>
+<li>intro_slide1.jpg </li>
+<li>intro_slide2.jpg </li>
+<li>intro_slide3.jpg</li>
+</ul>
+<p><br></p>
+<h2 id="about">About</h2>
+<h4 id="change-social-identities"><em>Change Social identities</em></h4>
+<p>Edit following settings in Config.java</p>
+<pre class="codehilite"><code class="language-java">public static final String FACEBOOK_PAGE = &quot;bentenstudio&quot;;
+public static final String TWITTER_ID = &quot;bentenstudio&quot;;
+public static final String EMAIL_ID = &quot;support@bentenstudio.co&quot;;</code></pre>
+
+
+<p><br></p>
+<h4 id="change-the-background"><em>Change the background</em></h4>
+<p>Replace <strong>drawable/about_background.jpg</strong> with your desired image</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <center>Benten Studio</center>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
